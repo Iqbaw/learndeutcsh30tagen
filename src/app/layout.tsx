@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/context/AppProvider";
 import { AppShell } from "@/components/AppShell";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "UX Mastery Lab — Belajar UI/UX Designer Profesional",
@@ -21,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" className={poppins.variable} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
