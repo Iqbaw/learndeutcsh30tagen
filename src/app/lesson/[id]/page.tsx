@@ -22,6 +22,7 @@ import {
   IconArrowRight,
   IconCheck,
   IconClock,
+  IconLock,
   IconPlay,
   IconSpark,
 } from "@/components/icons";
@@ -205,12 +206,15 @@ export default function LessonPage() {
     setLastOpenedModule,
     moduleProgressPct,
     isLessonDone,
+    isModuleUnlocked,
     hydrated,
   } = useApp();
 
+  const unlocked = mod ? (!hydrated ? mod.month === 1 : isModuleUnlocked(mod.id)) : false;
+
   useEffect(() => {
-    if (mod) setLastOpenedModule(mod.slug);
-  }, [mod, setLastOpenedModule]);
+    if (mod && isModuleUnlocked(mod.id)) setLastOpenedModule(mod.slug);
+  }, [mod, isModuleUnlocked, setLastOpenedModule]);
 
   if (!mod) {
     notFound();
@@ -219,6 +223,40 @@ export default function LessonPage() {
   const pct = hydrated ? moduleProgressPct(mod.id) : 0;
   const prev = modIndex > 0 ? curriculum[modIndex - 1] : null;
   const next = modIndex < curriculum.length - 1 ? curriculum[modIndex + 1] : null;
+
+  // Locked module: block access (only after hydration so we know real progress).
+  if (hydrated && !unlocked) {
+    return (
+      <div className="max-w-md mx-auto text-center py-16">
+        <div className="mx-auto grid place-items-center w-16 h-16 rounded-2xl bg-amber-400/15 text-amber-500 mb-4">
+          <IconLock width={26} height={26} />
+        </div>
+        <h1 className="text-xl font-bold">Modul ini masih terkunci</h1>
+        <p className="mt-2 text-muted text-sm">
+          {prev
+            ? `Selesaikan dulu modul “${prev.title}” untuk membuka ${mod.title}.`
+            : `Selesaikan modul sebelumnya untuk membuka ${mod.title}.`}{" "}
+          Belajar bertahap bikin fondasimu kuat.
+        </p>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+          {prev && (
+            <Link
+              href={`/lesson/${prev.slug}`}
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-600 to-violetx-600 text-white text-sm font-semibold px-4 py-2.5 shadow-glow hover:brightness-110 transition"
+            >
+              Lanjutkan {prev.title}
+            </Link>
+          )}
+          <Link
+            href="/curriculum"
+            className="text-sm font-medium px-4 py-2.5 rounded-xl surface hover:border-brand-400 transition-colors"
+          >
+            Lihat Kurikulum
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto">

@@ -13,7 +13,7 @@ export function RoadmapTimeline() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollXProgress } = useScroll({ container: scrollRef });
   const lineX = useTransform(scrollXProgress, [0, 1], ["0%", "-8%"]);
-  const { moduleProgressPct, isModuleComplete, hydrated } = useApp();
+  const { moduleProgressPct, isModuleComplete, isModuleUnlocked, hydrated } = useApp();
 
   return (
     <div className="relative">
@@ -31,15 +31,70 @@ export function RoadmapTimeline() {
             {curriculum.map((m, i) => {
               const pct = hydrated ? moduleProgressPct(m.id) : 0;
               const done = hydrated && isModuleComplete(m.id);
-              const prevDone =
-                i === 0 || (hydrated && isModuleComplete(curriculum[i - 1].id));
+              const unlocked = !hydrated ? m.month === 1 : isModuleUnlocked(m.id);
               const inProgress = pct > 0 && !done;
-              const locked = !prevDone && pct === 0;
               const status = done
                 ? "completed"
                 : inProgress
                   ? "in-progress"
                   : "locked";
+
+              const inner = (
+                <motion.div
+                  whileHover={unlocked ? { y: -6 } : undefined}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`surface rounded-2xl p-4 shadow-soft transition-shadow h-full ${
+                    unlocked ? "hover:shadow-glow" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span
+                      className={`grid place-items-center w-9 h-9 rounded-xl text-sm font-bold ${
+                        done
+                          ? "bg-green-500 text-white"
+                          : inProgress
+                            ? "bg-amber-400 text-ink-950"
+                            : "surface text-muted"
+                      }`}
+                    >
+                      {done ? (
+                        <IconCheck width={16} height={16} />
+                      ) : !unlocked ? (
+                        <IconLock width={14} height={14} />
+                      ) : (
+                        m.month
+                      )}
+                    </span>
+                    <StatusBadge status={status} />
+                  </div>
+                  <div className="rounded-xl bg-gradient-to-br from-brand-500/5 to-violetx-500/5 p-2 mb-3 text-brand-500/80">
+                    <Illustration type={m.illustrationType} className="h-20 w-full" />
+                  </div>
+                  <p className="text-[11px] text-muted">Bulan {m.month}</p>
+                  <h3
+                    className={`font-semibold text-[15px] leading-snug transition-colors ${
+                      unlocked ? "group-hover:text-brand-500" : ""
+                    }`}
+                  >
+                    {m.title}
+                  </h3>
+                  <p className="text-xs text-muted mt-1 line-clamp-2">
+                    {!unlocked ? "Terkunci — selesaikan modul sebelumnya dulu." : m.tagline}
+                  </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="flex-1 h-1.5 rounded-full bg-current/10 overflow-hidden">
+                      <span
+                        className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-cyanx-400 transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </span>
+                    <span className="text-[11px] font-semibold tabular-nums">
+                      {pct}%
+                    </span>
+                  </div>
+                </motion.div>
+              );
+
               return (
                 <motion.div
                   key={m.id}
@@ -48,55 +103,19 @@ export function RoadmapTimeline() {
                   transition={{ delay: i * 0.04, duration: 0.45 }}
                   className="w-[230px] shrink-0"
                 >
-                  <Link href={`/lesson/${m.slug}`} className="block group">
-                    <motion.div
-                      whileHover={{ y: -6 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      className="surface rounded-2xl p-4 shadow-soft hover:shadow-glow transition-shadow h-full"
+                  {unlocked ? (
+                    <Link href={`/lesson/${m.slug}`} className="block group">
+                      {inner}
+                    </Link>
+                  ) : (
+                    <div
+                      className="block cursor-not-allowed select-none"
+                      title="Selesaikan modul sebelumnya untuk membuka modul ini"
+                      aria-disabled="true"
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <span
-                          className={`grid place-items-center w-9 h-9 rounded-xl text-sm font-bold ${
-                            done
-                              ? "bg-green-500 text-white"
-                              : inProgress
-                                ? "bg-amber-400 text-ink-950"
-                                : "surface text-muted"
-                          }`}
-                        >
-                          {done ? (
-                            <IconCheck width={16} height={16} />
-                          ) : locked ? (
-                            <IconLock width={14} height={14} />
-                          ) : (
-                            m.month
-                          )}
-                        </span>
-                        <StatusBadge status={status} />
-                      </div>
-                      <div className="rounded-xl bg-gradient-to-br from-brand-500/5 to-violetx-500/5 p-2 mb-3 text-brand-500/80">
-                        <Illustration type={m.illustrationType} className="h-20 w-full" />
-                      </div>
-                      <p className="text-[11px] text-muted">Bulan {m.month}</p>
-                      <h3 className="font-semibold text-[15px] leading-snug group-hover:text-brand-500 transition-colors">
-                        {m.title}
-                      </h3>
-                      <p className="text-xs text-muted mt-1 line-clamp-2">
-                        {m.tagline}
-                      </p>
-                      <div className="mt-3 flex items-center gap-2">
-                        <span className="flex-1 h-1.5 rounded-full bg-current/10 overflow-hidden">
-                          <span
-                            className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-cyanx-400 transition-all duration-500"
-                            style={{ width: `${pct}%` }}
-                          />
-                        </span>
-                        <span className="text-[11px] font-semibold tabular-nums">
-                          {pct}%
-                        </span>
-                      </div>
-                    </motion.div>
-                  </Link>
+                      {inner}
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
