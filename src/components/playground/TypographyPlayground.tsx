@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { usePersistentState } from "@/lib/usePersistentState";
+import { CopyButton } from "@/components/playground/CopyButton";
 import { InfoCallout } from "@/components/ui";
 
 function Slider({
@@ -43,10 +44,10 @@ function Slider({
 }
 
 export function TypographyPlayground() {
-  const [h1, setH1] = useState(34);
-  const [body, setBody] = useState(16);
-  const [weight, setWeight] = useState(700);
-  const [lh, setLh] = useState(1.5);
+  const [h1, setH1] = usePersistentState<number>("type-h1", 34);
+  const [body, setBody] = usePersistentState<number>("type-body", 16);
+  const [weight, setWeight] = usePersistentState<number>("type-weight", 700);
+  const [lh, setLh] = usePersistentState<number>("type-lh", 1.5);
 
   const ratio = h1 / body;
   let feedback = {
@@ -93,7 +94,12 @@ export function TypographyPlayground() {
       </div>
 
       <div className="surface rounded-2xl p-6 flex flex-col justify-center">
-        <p className="text-xs uppercase tracking-wide text-muted mb-2">Preview langsung</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs uppercase tracking-wide text-muted">Preview langsung</p>
+          <CopyButton
+            value={`.heading {\n  font-size: ${h1}px;\n  font-weight: ${weight};\n  line-height: 1.1;\n}\n.body {\n  font-size: ${body}px;\n  line-height: ${lh};\n}`}
+          />
+        </div>
         <h2 style={{ fontSize: h1, fontWeight: weight, lineHeight: 1.1 }}>
           Desain mahal selalu punya alasan
         </h2>

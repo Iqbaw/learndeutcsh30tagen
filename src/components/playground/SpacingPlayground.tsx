@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { usePersistentState } from "@/lib/usePersistentState";
+import { CopyButton } from "@/components/playground/CopyButton";
 import { InfoCallout } from "@/components/ui";
 
 export function SpacingPlayground() {
-  const [padding, setPadding] = useState(24);
-  const [gap, setGap] = useState(16);
-  const [grid, setGrid] = useState(true);
+  const [padding, setPadding] = usePersistentState<number>("space-padding", 24);
+  const [gap, setGap] = usePersistentState<number>("space-gap", 16);
+  const [grid, setGrid] = usePersistentState<boolean>("space-grid", true);
 
   const onGrid8 = padding % 8 === 0 && gap % 8 === 0;
   const onGrid4 = padding % 4 === 0 && gap % 4 === 0;
@@ -71,6 +72,10 @@ export function SpacingPlayground() {
         <InfoCallout tone={feedback.tone} title={feedback.title}>
           {feedback.msg}
         </InfoCallout>
+        <CopyButton
+          value={`padding: ${padding}px;\ngap: ${gap}px;`}
+          label="Salin CSS spacing"
+        />
       </div>
 
       <div className="surface rounded-2xl p-6 grid place-items-center">
