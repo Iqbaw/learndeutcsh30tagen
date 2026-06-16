@@ -41,6 +41,7 @@ interface AppState {
   totalProgressPct: number;
   moduleProgressPct: (moduleId: string) => number;
   isModuleComplete: (moduleId: string) => boolean;
+  isModuleUnlocked: (moduleId: string) => boolean;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -210,6 +211,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [moduleProgressPct],
   );
 
+  // A module is unlocked when it is the first module, has any progress,
+  // or the previous module is fully complete.
+  const isModuleUnlocked = useCallback(
+    (moduleId: string) => {
+      const idx = curriculum.findIndex((m) => m.id === moduleId);
+      if (idx <= 0) return true;
+      if (moduleProgressPct(moduleId) > 0) return true;
+      return isModuleComplete(curriculum[idx - 1].id);
+    },
+    [moduleProgressPct, isModuleComplete],
+  );
+
   const completedModules = useMemo(
     () => curriculum.filter((m) => isModuleComplete(m.id)).map((m) => m.id),
     [isModuleComplete],
@@ -242,6 +255,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     totalProgressPct,
     moduleProgressPct,
     isModuleComplete,
+    isModuleUnlocked,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

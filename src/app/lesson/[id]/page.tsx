@@ -12,9 +12,7 @@ export const dynamicParams = false;
 export function generateMetadata({ params }: { params: { id: string } }) {
   const mod = curriculum.find((m) => m.slug === params.id);
   return {
-    title: mod
-      ? `${mod.title} — UX Mastery Lab`
-      : "Modul — UX Mastery Lab",
+    title: mod ? `${mod.title} — UX Mastery Lab` : "Modul — UX Mastery Lab",
     description: mod?.description,
   };
 }
