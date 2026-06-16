@@ -14,8 +14,35 @@ import {
 } from "@/components/ui";
 import { IconArrowRight, IconCheck, IconLock, IconClock } from "@/components/icons";
 
+function ModuleWrapper({
+  unlocked,
+  slug,
+  children,
+}: {
+  unlocked: boolean;
+  slug: string;
+  children: React.ReactNode;
+}) {
+  if (!unlocked) {
+    return (
+      <div
+        className="block group cursor-not-allowed select-none"
+        title="Selesaikan modul sebelumnya untuk membuka modul ini"
+        aria-disabled="true"
+      >
+        {children}
+      </div>
+    );
+  }
+  return (
+    <Link href={`/lesson/${slug}`} className="block group">
+      {children}
+    </Link>
+  );
+}
+
 export default function CurriculumPage() {
-  const { moduleProgressPct, isModuleComplete, hydrated, totalProgressPct } = useApp();
+  const { moduleProgressPct, isModuleComplete, isModuleUnlocked, hydrated, totalProgressPct } = useApp();
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -48,10 +75,8 @@ export default function CurriculumPage() {
           {curriculum.map((m, i) => {
             const pct = hydrated ? moduleProgressPct(m.id) : 0;
             const done = hydrated && isModuleComplete(m.id);
-            const prevDone =
-              i === 0 || (hydrated && isModuleComplete(curriculum[i - 1].id));
+            const unlocked = !hydrated ? m.month === 1 : isModuleUnlocked(m.id);
             const inProgress = pct > 0 && !done;
-            const locked = !prevDone && pct === 0;
             const status = done ? "completed" : inProgress ? "in-progress" : "locked";
 
             return (
@@ -68,18 +93,20 @@ export default function CurriculumPage() {
                 >
                   {done ? (
                     <IconCheck width={16} height={16} />
-                  ) : locked ? (
+                  ) : !unlocked ? (
                     <IconLock width={14} height={14} />
                   ) : (
                     m.month
                   )}
                 </span>
 
-                <Link href={`/lesson/${m.slug}`} className="block group">
+                <ModuleWrapper unlocked={unlocked} slug={m.slug}>
                   <motion.div
-                    whileHover={{ y: -3 }}
+                    whileHover={unlocked ? { y: -3 } : undefined}
                     transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                    className="surface rounded-2xl p-5 shadow-soft hover:shadow-glow transition-shadow"
+                    className={`surface rounded-2xl p-5 shadow-soft transition-shadow ${
+                      unlocked ? "hover:shadow-glow" : "opacity-60"
+                    }`}
                   >
                     <div className="flex flex-col sm:flex-row gap-4">
                       <div className="rounded-xl bg-gradient-to-br from-brand-500/8 to-violetx-500/8 p-3 text-brand-500 shrink-0 sm:w-44">
@@ -121,15 +148,21 @@ export default function CurriculumPage() {
                             />
                           </span>
                           <span className="text-[11px] font-semibold tabular-nums">{pct}%</span>
-                          <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-500 ml-auto group-hover:gap-2 transition-all">
-                            {done ? "Tinjau" : pct > 0 ? "Lanjutkan" : "Mulai"}
-                            <IconArrowRight width={14} height={14} />
-                          </span>
+                          {unlocked ? (
+                            <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-500 ml-auto group-hover:gap-2 transition-all">
+                              {done ? "Tinjau" : pct > 0 ? "Lanjutkan" : "Mulai"}
+                              <IconArrowRight width={14} height={14} />
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-sm font-medium text-muted ml-auto">
+                              <IconLock width={13} height={13} /> Terkunci
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
                   </motion.div>
-                </Link>
+                </ModuleWrapper>
               </Reveal>
             );
           })}

@@ -90,15 +90,67 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function ModuleMiniList({ onNavigate }: { onNavigate?: () => void }) {
-  const { moduleProgressPct, isModuleComplete } = useApp();
+  const { moduleProgressPct, isModuleComplete, isModuleUnlocked, hydrated } = useApp();
   return (
     <div className="space-y-1">
-      {curriculum.map((m, i) => {
-        const pct = moduleProgressPct(m.id);
-        const done = isModuleComplete(m.id);
-        const prevDone = i === 0 || isModuleComplete(curriculum[i - 1].id);
+      {curriculum.map((m) => {
+        const pct = hydrated ? moduleProgressPct(m.id) : 0;
+        const done = hydrated && isModuleComplete(m.id);
+        const unlocked = !hydrated ? m.month === 1 : isModuleUnlocked(m.id);
         const inProgress = pct > 0 && !done;
-        const locked = !prevDone && pct === 0;
+
+        const badge = (
+          <span
+            className={`grid place-items-center w-7 h-7 rounded-lg text-[11px] font-bold shrink-0 ${
+              done
+                ? "bg-green-500 text-white"
+                : inProgress
+                  ? "bg-amber-400 text-ink-950"
+                  : "surface text-muted"
+            }`}
+          >
+            {done ? (
+              <IconCheck width={14} height={14} />
+            ) : !unlocked ? (
+              <IconLock width={12} height={12} />
+            ) : (
+              m.month
+            )}
+          </span>
+        );
+
+        const body = (
+          <span className="min-w-0 flex-1">
+            <span
+              className={`block text-[12.5px] font-medium truncate transition-colors ${
+                unlocked ? "group-hover:text-brand-500" : ""
+              }`}
+            >
+              {m.title}
+            </span>
+            <span className="mt-1 block h-1 rounded-full bg-current/10 overflow-hidden">
+              <span
+                className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-cyanx-400 transition-all"
+                style={{ width: `${pct}%` }}
+              />
+            </span>
+          </span>
+        );
+
+        if (!unlocked) {
+          return (
+            <div
+              key={m.id}
+              className="flex items-center gap-3 px-2.5 py-2 rounded-lg opacity-55 cursor-not-allowed select-none"
+              title="Selesaikan modul sebelumnya untuk membuka modul ini"
+              aria-disabled="true"
+            >
+              {badge}
+              {body}
+            </div>
+          );
+        }
+
         return (
           <Link
             key={m.id}
@@ -106,28 +158,8 @@ function ModuleMiniList({ onNavigate }: { onNavigate?: () => void }) {
             onClick={onNavigate}
             className="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-brand-500/5 transition-colors group"
           >
-            <span
-              className={`grid place-items-center w-7 h-7 rounded-lg text-[11px] font-bold shrink-0 ${
-                done
-                  ? "bg-green-500 text-white"
-                  : inProgress
-                    ? "bg-amber-400 text-ink-950"
-                    : "surface text-muted"
-              }`}
-            >
-              {done ? <IconCheck width={14} height={14} /> : locked ? <IconLock width={12} height={12} /> : m.month}
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[12.5px] font-medium truncate group-hover:text-brand-500 transition-colors">
-                {m.title}
-              </span>
-              <span className="mt-1 block h-1 rounded-full bg-current/10 overflow-hidden">
-                <span
-                  className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-cyanx-400 transition-all"
-                  style={{ width: `${pct}%` }}
-                />
-              </span>
-            </span>
+            {badge}
+            {body}
           </Link>
         );
       })}
