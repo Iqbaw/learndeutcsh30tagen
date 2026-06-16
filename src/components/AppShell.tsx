@@ -277,19 +277,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </header>
 
-          {/* Page content with transitions */}
+          {/* Page content with CSS-based fade (paints without waiting for JS) */}
           <main className="flex-1 px-4 sm:px-6 py-6 pb-24 lg:pb-10">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={pathname}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {children}
-              </motion.div>
-            </AnimatePresence>
+            <div key={pathname} className="page-enter">
+              {children}
+            </div>
           </main>
         </div>
       </div>

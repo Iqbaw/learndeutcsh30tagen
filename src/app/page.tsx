@@ -11,7 +11,7 @@ import { SkillRadar } from "@/components/SkillRadar";
 import { RoadmapTimeline } from "@/components/RoadmapTimeline";
 import { DailyChecklist } from "@/components/DailyChecklist";
 import { Illustration } from "@/components/Illustration";
-import { Card, Reveal, LevelBadge, staggerContainer, staggerItem } from "@/components/ui";
+import { Card, Reveal, LevelBadge } from "@/components/ui";
 import { DAILY_QUOTES } from "@/data/dailyPlan";
 import {
   IconArrowRight,
@@ -63,13 +63,8 @@ export default function DashboardPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Welcome + progress */}
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="show"
-        className="grid lg:grid-cols-3 gap-4"
-      >
-        <motion.div variants={staggerItem} className="lg:col-span-2">
+      <div className="grid lg:grid-cols-3 gap-4">
+        <Reveal className="lg:col-span-2">
           <Card glass className="relative overflow-hidden p-6 h-full">
             <div className="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-brand-500/10 blur-3xl" />
             <div className="absolute right-4 bottom-2 text-violetx-500/40 hidden sm:block">
@@ -104,9 +99,9 @@ export default function DashboardPage() {
               </div>
             </div>
           </Card>
-        </motion.div>
+        </Reveal>
 
-        <motion.div variants={staggerItem}>
+        <Reveal delay={0.08}>
           <Card className="p-6 h-full flex flex-col items-center justify-center text-center">
             <p className="text-sm font-semibold mb-3">Progress Total</p>
             <ProgressRing value={hydrated ? totalProgressPct : 0} label="perjalanan" />
@@ -115,8 +110,8 @@ export default function DashboardPage() {
               {curriculum.reduce((a, m) => a + m.lessons.length, 0)} lesson selesai
             </p>
           </Card>
-        </motion.div>
-      </motion.div>
+        </Reveal>
+      </div>
 
       {/* Quick actions */}
       <Reveal>

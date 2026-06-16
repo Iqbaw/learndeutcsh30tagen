@@ -137,6 +137,36 @@ body {
   color: var(--text-muted);
 }
 
+/* Page enter animation (CSS so content is visible even before JS hydrates) */
+.page-enter {
+  animation: pageEnter 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reveal-on-mount (CSS based, no JS dependency to become visible) */
+.reveal {
+  animation: revealUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }

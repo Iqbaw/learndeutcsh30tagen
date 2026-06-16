@@ -10,8 +10,7 @@ import {
   PageHeader,
   LevelBadge,
   StatusBadge,
-  staggerContainer,
-  staggerItem,
+  Reveal,
 } from "@/components/ui";
 import { IconArrowRight, IconCheck, IconLock, IconClock } from "@/components/icons";
 
@@ -41,12 +40,7 @@ export default function CurriculumPage() {
         </div>
       </div>
 
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="show"
-        className="relative"
-      >
+      <div className="relative">
         {/* vertical timeline line */}
         <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-brand-500/40 via-violetx-500/40 to-cyanx-400/40 hidden sm:block" />
 
@@ -61,7 +55,7 @@ export default function CurriculumPage() {
             const status = done ? "completed" : inProgress ? "in-progress" : "locked";
 
             return (
-              <motion.div key={m.id} variants={staggerItem} className="relative sm:pl-12">
+              <Reveal key={m.id} delay={Math.min(i * 0.04, 0.32)} className="relative sm:pl-12">
                 {/* node */}
                 <span
                   className={`absolute left-0 top-5 hidden sm:grid place-items-center w-10 h-10 rounded-xl text-sm font-bold z-10 ${
@@ -136,11 +130,11 @@ export default function CurriculumPage() {
                     </div>
                   </motion.div>
                 </Link>
-              </motion.div>
+              </Reveal>
             );
           })}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
