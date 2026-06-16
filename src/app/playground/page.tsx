@@ -8,14 +8,27 @@ import { ContrastChecker } from "@/components/playground/ContrastChecker";
 import { UserFlowBuilder } from "@/components/playground/UserFlowBuilder";
 import { ComponentSimulator } from "@/components/playground/ComponentSimulator";
 import { WireframeBuilder } from "@/components/playground/WireframeBuilder";
+import { PaletteGenerator } from "@/components/playground/PaletteGenerator";
+import { ShadowPlayground } from "@/components/playground/ShadowPlayground";
+import { GradientBuilder } from "@/components/playground/GradientBuilder";
 
-const TOOLS = [
-  { id: "typography", label: "Typography", desc: "Atur skala teks dan rasakan kapan hierarchy jadi jelas." },
-  { id: "spacing", label: "Spacing", desc: "Geser padding & jarak, cek keselarasan dengan grid 8pt." },
-  { id: "contrast", label: "Kontras Warna", desc: "Uji pasangan warna teks-background terhadap standar WCAG." },
-  { id: "components", label: "Component State", desc: "Jelajahi semua state button dan input." },
-  { id: "userflow", label: "User Flow", desc: "Susun node alur: Start, Action, Decision, Success, Error." },
-  { id: "wireframe", label: "Wireframe", desc: "Seret blok untuk menyusun struktur halaman." },
+interface Tool {
+  id: string;
+  label: string;
+  desc: string;
+  group: "Visual" | "Warna" | "Komponen" | "Struktur";
+}
+
+const TOOLS: Tool[] = [
+  { id: "typography", label: "Typography", desc: "Atur skala teks dan rasakan kapan hierarchy jadi jelas. Salin CSS-nya.", group: "Visual" },
+  { id: "spacing", label: "Spacing", desc: "Geser padding & jarak, cek keselarasan dengan grid 8pt.", group: "Visual" },
+  { id: "shadow", label: "Shadow & Elevation", desc: "Racik bayangan halus ala desain premium, lalu salin box-shadow.", group: "Visual" },
+  { id: "palette", label: "Color Palette", desc: "Hasilkan skala warna 50–900 dari satu warna + saran accent.", group: "Warna" },
+  { id: "contrast", label: "Kontras Warna", desc: "Uji pasangan warna teks-background terhadap standar WCAG.", group: "Warna" },
+  { id: "gradient", label: "Gradient", desc: "Bangun gradient untuk hero, kartu, atau tombol.", group: "Warna" },
+  { id: "components", label: "Component State", desc: "Jelajahi semua state button dan input.", group: "Komponen" },
+  { id: "userflow", label: "User Flow", desc: "Susun node alur: Start, Action, Decision, Success, Error.", group: "Struktur" },
+  { id: "wireframe", label: "Wireframe", desc: "Seret blok untuk menyusun struktur halaman.", group: "Struktur" },
 ];
 
 export default function PlaygroundPage() {
@@ -41,7 +54,7 @@ export default function PlaygroundPage() {
       <PageHeader
         eyebrow="Design Playground"
         title="Belajar dengan Mencoba, Bukan Cuma Membaca"
-        desc="Enam alat interaktif untuk melatih intuisi desainmu. Eksperimen bebas — setiap perubahan langsung memberi feedback."
+        desc="Sembilan alat interaktif untuk melatih intuisi desainmu. Eksperimen bebas — setiap perubahan langsung memberi feedback, banyak yang bisa langsung kamu salin sebagai CSS. Hasil eksperimenmu otomatis tersimpan di perangkat."
       />
 
       {/* tab nav */}
@@ -67,11 +80,19 @@ export default function PlaygroundPage() {
         {TOOLS.map((t) => (
           <Reveal key={t.id}>
             <Card id={t.id} className="p-5 sm:p-6 scroll-mt-32">
-              <h2 className="text-lg font-bold">{t.label} Playground</h2>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-500">
+                  {t.group}
+                </span>
+                <h2 className="text-lg font-bold">{t.label} Playground</h2>
+              </div>
               <p className="text-sm text-muted mb-5">{t.desc}</p>
               {t.id === "typography" && <TypographyPlayground />}
               {t.id === "spacing" && <SpacingPlayground />}
+              {t.id === "shadow" && <ShadowPlayground />}
+              {t.id === "palette" && <PaletteGenerator />}
               {t.id === "contrast" && <ContrastChecker />}
+              {t.id === "gradient" && <GradientBuilder />}
               {t.id === "components" && <ComponentSimulator />}
               {t.id === "userflow" && <UserFlowBuilder />}
               {t.id === "wireframe" && <WireframeBuilder />}

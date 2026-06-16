@@ -125,3 +125,22 @@ export const IconClock = (p: P) => (
     <path d="M12 7v5l3 2" />
   </svg>
 );
+
+export const IconStar = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 17l-5.3 2.8 1-5.8-4.2-4.1 5.9-.9z" />
+  </svg>
+);
+
+export const IconLayers = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 3 3 8l9 5 9-5-9-5Z" />
+    <path d="M3 13l9 5 9-5M3 18l9 5 9-5" />
+  </svg>
+);
+
+export const IconDrop = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 3s6 6.5 6 10.5a6 6 0 0 1-12 0C6 9.5 12 3 12 3Z" />
+  </svg>
+);
