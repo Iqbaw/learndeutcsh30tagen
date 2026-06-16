@@ -1,0 +1,130 @@
+import type { GlossaryTerm } from "@/lib/types";
+
+export const glossary: GlossaryTerm[] = [
+  {
+    term: "UI",
+    short: "User Interface — tampilan yang dilihat dan disentuh user.",
+    full: "UI (User Interface) adalah lapisan visual dan interaktif tempat user berinteraksi dengan produk: tombol, teks, warna, ikon, dan layout. UI yang baik terlihat rapi dan jelas.",
+    example: "Susunan tombol, kartu, dan tipografi pada halaman dashboard.",
+  },
+  {
+    term: "UX",
+    short: "User Experience — keseluruhan rasa saat memakai produk.",
+    full: "UX (User Experience) adalah pengalaman menyeluruh user saat mencapai tujuannya: apakah mudah, cepat, dan tidak membingungkan. UX mencakup alur, struktur, dan emosi, bukan hanya tampilan.",
+    example: "Seberapa mudah user menyelesaikan checkout dari awal sampai sukses.",
+  },
+  {
+    term: "User Flow",
+    short: "Peta semua jalur user mencapai tujuan, termasuk error.",
+    full: "User flow menggambarkan keseluruhan langkah dan percabangan yang mungkin dilalui user, termasuk jalur sukses dan jalur gagal. Berguna untuk memastikan tidak ada kondisi yang terlupa.",
+    example: "Diagram dari halaman produk, keranjang, pembayaran, sampai sukses/gagal.",
+  },
+  {
+    term: "Task Flow",
+    short: "Satu jalur ideal untuk menyelesaikan satu tugas.",
+    full: "Task flow fokus pada satu rute terbaik menyelesaikan satu tugas tanpa percabangan kompleks. Cocok untuk merancang dan menjelaskan satu skenario inti.",
+    example: "Langkah login: buka app, isi email, isi password, masuk.",
+  },
+  {
+    term: "Wireframe",
+    short: "Kerangka layout tanpa detail visual.",
+    full: "Wireframe adalah sketsa struktur halaman yang menampilkan tata letak dan hierarki tanpa warna atau detail final. Low-fidelity untuk cepat menguji ide, high-fidelity mendekati final.",
+    example: "Kotak abu-abu menandai posisi header, konten, dan tombol.",
+  },
+  {
+    term: "Prototype",
+    short: "Versi yang bisa diklik untuk menguji interaksi.",
+    full: "Prototype adalah simulasi produk yang bisa diklik untuk menguji alur dan interaksi sebelum dibangun. Mulai dari klik antar layar sampai interaksi mendetail.",
+    example: "Klik antar 5 layar onboarding di Figma untuk diuji ke user.",
+  },
+  {
+    term: "Design System",
+    short: "Satu sumber kebenaran komponen dan aturan desain.",
+    full: "Design system adalah kumpulan token, komponen, pola, dan dokumentasi yang menjaga produk konsisten dan scalable. Memudahkan tim bekerja cepat tanpa kehilangan kualitas.",
+    example: "Library berisi button, input, dan token warna yang dipakai seluruh produk.",
+  },
+  {
+    term: "Component",
+    short: "Elemen UI yang bisa dipakai ulang.",
+    full: "Component adalah bagian UI yang dirancang sekali lalu dipakai berulang (button, card, input). Mengubah master komponen akan memperbarui semua salinannya.",
+    example: "Satu komponen button dipakai di puluhan layar.",
+  },
+  {
+    term: "Variant",
+    short: "Versi berbeda dari satu komponen.",
+    full: "Variant adalah variasi state atau tipe dari satu komponen yang disatukan lewat properti, seperti ukuran (sm/md/lg) atau state (default/hover/disabled).",
+    example: "Button primary dan secondary sebagai variant dalam satu set.",
+  },
+  {
+    term: "Token",
+    short: "Nama untuk nilai desain agar konsisten dan mudah diubah.",
+    full: "Design token adalah penamaan untuk keputusan desain (warna, spacing, radius) sehingga bisa diubah terpusat dan dipakai konsisten di seluruh produk.",
+    example: "color/brand/500 merujuk satu warna biru yang dipakai di mana-mana.",
+  },
+  {
+    term: "Accessibility",
+    short: "Membuat produk bisa dipakai lebih banyak orang.",
+    full: "Accessibility (a11y) memastikan produk bisa digunakan orang dengan beragam kemampuan dan konteks: kontras cukup, keyboard navigation, focus state, dan teks alternatif.",
+    example: "Form yang bisa dioperasikan penuh dengan keyboard dan dibaca screen reader.",
+  },
+  {
+    term: "Usability Testing",
+    short: "Mengamati user memakai produk untuk menemukan masalah.",
+    full: "Usability testing memberi user tugas nyata lalu mengamati kesulitannya tanpa membantu. Lima user biasanya cukup menemukan mayoritas masalah besar.",
+    example: "Meminta user menemukan tombol simpan, lalu mencatat di mana ia bingung.",
+  },
+  {
+    term: "Persona",
+    short: "Ringkasan pola user nyata berbasis data.",
+    full: "Persona adalah profil ringkas yang merangkum tujuan, frustrasi, dan konteks dari pola user nyata. Membantu tim punya gambaran user yang sama. Bukan tokoh karangan tanpa data.",
+    example: "Profil 'Rina, manajer sibuk yang butuh laporan cepat di mobile'.",
+  },
+  {
+    term: "Jobs To Be Done",
+    short: "Pekerjaan yang ingin diselesaikan user.",
+    full: "Jobs To Be Done (JTBD) memandang produk sebagai sesuatu yang 'dipekerjakan' user untuk menuntaskan suatu pekerjaan, fokus pada hasil yang diinginkan, bukan fitur.",
+    example: "Bukan 'butuh aplikasi catatan', tapi 'ingin tidak lupa ide saat rapat'.",
+  },
+  {
+    term: "Handoff",
+    short: "Penyerahan desain ke developer untuk dibangun.",
+    full: "Handoff adalah proses menyerahkan desain lengkap dengan spec: ukuran, token, perilaku responsif, dan state, agar developer bisa membangun dengan minim tebakan.",
+    example: "Anotasi reflow tiap breakpoint dan daftar state komponen di Dev Mode.",
+  },
+  {
+    term: "Conversion",
+    short: "Persentase user yang melakukan aksi yang diinginkan.",
+    full: "Conversion adalah rasio user yang menyelesaikan tujuan tertentu (mendaftar, membeli) dibanding total yang mencoba. Meningkatkan conversion sering jadi tujuan desain bisnis.",
+    example: "30% pengunjung halaman pricing akhirnya berlangganan.",
+  },
+  {
+    term: "Activation",
+    short: "Momen user pertama merasakan nilai produk.",
+    full: "Activation adalah 'aha moment' ketika user pertama kali merasakan manfaat inti produk. Onboarding yang baik mempercepatnya dan menentukan apakah user bertahan.",
+    example: "User pertama kali berhasil membuat dan membagikan dokumen.",
+  },
+  {
+    term: "Retention",
+    short: "Seberapa banyak user kembali memakai produk.",
+    full: "Retention mengukur user yang terus kembali setelah pertama memakai. Produk yang sehat bertahan dari retention, bukan hanya pendaftaran baru.",
+    example: "40% user masih aktif setelah 30 hari.",
+  },
+  {
+    term: "Churn",
+    short: "User yang berhenti memakai produk.",
+    full: "Churn adalah kebalikan retention: persentase user yang berhenti memakai atau berlangganan dalam periode tertentu. Churn tinggi menandakan masalah nilai atau pengalaman.",
+    example: "5% pelanggan berhenti berlangganan setiap bulan.",
+  },
+  {
+    term: "Funnel",
+    short: "Tahapan user dari datang sampai mencapai tujuan.",
+    full: "Funnel adalah rangkaian tahap yang dilalui user menuju tujuan, di mana sebagian user gugur di tiap tahap. Menemukan tahap dengan kebocoran terbesar membantu prioritas perbaikan.",
+    example: "Kunjungi situs, daftar, verifikasi, bayar, jadi pelanggan.",
+  },
+  {
+    term: "Information Architecture",
+    short: "Cara informasi dikelompokkan dan dinamai.",
+    full: "Information Architecture (IA) mengatur struktur dan penamaan konten agar user mudah menemukan yang dicari. IA yang baik membuat user menebak lokasi dengan benar.",
+    example: "Struktur menu: Beranda, Produk, Harga, Bantuan.",
+  },
+];
